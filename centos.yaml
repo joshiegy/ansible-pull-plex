@@ -1,6 +1,8 @@
 ---
 - hosts: localhost
   tasks:
+    - name: Include the varsfile
+      include_vars: main.yaml
     - name: Add epel
       yum_repository:
         name: epel
