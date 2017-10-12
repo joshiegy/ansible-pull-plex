@@ -17,7 +17,7 @@
         exclude: kernel*
     - name: Install plex
       yum:
-        name: {{ pms }}
+        name: "{{ pms }}"
         state: installed
       register: pms_install
     - name: Restart plex
