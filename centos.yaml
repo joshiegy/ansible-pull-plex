@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  vars:
+    pms: 'https://downloads.plex.tv/plex-media-server/1.9.5.4339-46276db8d/plexmediaserver-1.9.5.4339-46276db8d.x86_64.rpm'
+  tasks:
+    - name: Add epel
+      yum_repository:
+        name: epel
+        description: Epel Yum repo
+        baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+        async: yes
+        exclude: kernel*
+    - name: Update system
+      yum:
+        name: '*'
+        state: latest
+        exclude: kernel*
+    - name: Install plex
+      yum:
+        name: {{ pms }}
+        state: installed
+      register: pms_install
+    - name: Restart plex
+      systemd:
+        name: plexmediaserver
+        enabled: yes
+        state: restarted
+      when: pms_install.changed
